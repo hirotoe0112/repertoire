@@ -1,0 +1,31 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "repertoire",
+  "main": "worker/index.ts",
+  "compatibility_date": "2025-01-01",
+
+  // ビルド済みの SPA を同じ Worker から配信する
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application"
+  },
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "repertoire",
+      // `npx wrangler d1 create repertoire` の出力をここに貼る
+      "database_id": "PLACEHOLDER_DATABASE_ID"
+    }
+  ],
+
+  // 毎時起動し、JST の設定時刻に一致したときだけ通知を送る (worker/index.ts の runScheduled)
+  "triggers": {
+    "crons": ["0 * * * *"]
+  },
+
+  "observability": {
+    "enabled": true
+  }
+}
